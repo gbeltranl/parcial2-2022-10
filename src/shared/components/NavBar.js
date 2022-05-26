@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './NavBar.scss';
+import { LocaleContext } from '../../context/LocaleContext';
 
 export const NavBar = () => {
+  let { localeNew, changeLocale } = useContext(LocaleContext);
+
   return (
     <nav className='navbar navbar-expand-lg navbar-light bg-light'>
       <div className='container-fluid'>
@@ -27,6 +30,14 @@ export const NavBar = () => {
               <Link className='nav-link' to='/'>
                 <FormattedMessage id='pokemons' />
               </Link>
+            </li>
+            <li className='nav-item active'>
+              <Link className='nav-link' to='/report'>
+                <FormattedMessage id='Report' />
+              </Link>
+            </li>
+            <li className='nav-item'>
+              <button className='btn btn=primary' onClick={changeLocale}><FormattedMessage id='changeLanguage'/></button>
             </li>
           </ul>
         </div>

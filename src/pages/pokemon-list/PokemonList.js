@@ -1,35 +1,97 @@
-import React from 'react';
-import './PokemonList.scss';
+import React, { useContext, useEffect, useState } from "react";
+import { FormattedMessage } from "react-intl";
+import Bar from "../../charts/bar-chart";
+import { LocaleContext } from "../../context/LocaleContext";
+import { LOCALES } from "../../i18n/locales";
+import "./PokemonList.scss";
 
 export const PokemonList = () => {
+  let { locale, changeLocale } = useContext(LocaleContext);
+
+  
+  const [pokemons, setPokemons] = useState(null);
+  useEffect(() => {
+    if (!navigator.onLine) {
+      console.log("Offline");
+      if (localStorage.getItem("pokemons") === null) {
+        setPokemons({});
+      } else {
+        let pokemonsInStorage = JSON.parse(localStorage.getItem("pokemons"));
+        setPokemons(pokemonsInStorage);
+      }
+    } else {
+      if (locale === LOCALES.SPANISH) {
+        fetch(
+          "https://gist.githubusercontent.com/jhonatan89/e379fadf8ed0f5381a2d8f8f3dea90c3/raw/f8357c439bbb7b4bd3dc6e8807c52105fb137ec6/pokemon-es.json"
+        )
+          .then((res) => res.json())
+          .then((res) => {
+            console.log("res", res);
+            setPokemons(res);
+            console.log("pokemons", pokemons);
+            localStorage.setItem("pokemons", JSON.stringify(res));
+          });
+      } else {
+        fetch(
+          "https://gist.githubusercontent.com/jhonatan89/2089276d3ce0faceff8e55fc3459b818/raw/30ee1a77b3e328108faaaa9aaac6f2ddaa3d3711/pokemons-en.json"
+        )
+          .then((res) => res.json())
+          .then((res) => {
+            console.log("res", res);
+            setPokemons(res);
+            console.log("pokemons", pokemons);
+            localStorage.setItem("pokemons", JSON.stringify(res));
+          });
+      }
+    }
+  }, [locale]);
   return (
     <>
-      <div className='pokemon-container'>
-        <h1>Most wanted pokemons</h1>
-        <table className='table'>
+      <div className="pokemon-container">
+        <h1><FormattedMessage id="title"/></h1>
+        <table className="table">
           <thead>
             <tr>
-              <th scope='col'>#</th>
-              <th scope='col'>Image</th>
-              <th scope='col'>Name</th>
-              <th scope='col'>Description</th>
-              <th scope='col'>Height</th>
-              <th scope='col'>Weight</th>
-              <th scope='col'>Type</th>
+              <th scope="col">#</th>
+              <th scope="col">
+                <FormattedMessage id="Image" />
+              </th>
+              <th scope="col">
+                <FormattedMessage id="Name" />
+              </th>
+              <th scope="col">
+                <FormattedMessage id="Description" />
+              </th>
+              <th scope="col">
+                <FormattedMessage id="Height" />
+              </th>
+              <th scope="col">
+                <FormattedMessage id="Weight" />
+              </th>
+              <th scope="col">
+                <FormattedMessage id="Type" />
+              </th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope='row'>1</th>
-              <td>--</td>
-              <td>--</td>
-              <td>--</td>
-              <td>--</td>
-              <td>--</td>
-              <td>--</td>
-            </tr>
+            {pokemons &&
+              pokemons.map((p, i) => (
+                <tr>
+                  <th scope="row">{i}</th>
+                  <td><img className="img" src={p.ThumbnailImage} alt={p.ThumbnailAltTex} referrerPolicy="no-referrer"/></td>
+                  <td>{p.name}</td>
+                  <td>{p.description}</td>
+                  <td>{p.height}</td>
+                  <td>{p.weight}</td>
+                  <td>{p.type.map((t,i) => (
+                      <span className="badge bg-secondary">{t}</span>
+                    ))}
+                    </td>
+                </tr>
+              ))}
           </tbody>
         </table>
+        
       </div>
     </>
   );

@@ -1,21 +1,28 @@
 import { LOCALES } from './i18n/locales';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { IntlProvider } from 'react-intl';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import messages from './i18n/messages';
 import { NavBar } from './shared/components/NavBar';
 import { PokemonList } from './pages/pokemon-list/PokemonList';
+import { Report } from './pages/Report';
 import './App.scss';
+import { LocaleContext } from './context/LocaleContext';
 
 function App() {
-  const [language, setLanguage] = useState(LOCALES.SPANISH);
+  let { localeNew, changeLocale } = useContext(LocaleContext);
+  console.log(localeNew);
+  /* useEffect(()=> {
+    setLanguage(navigator.language);
+  },[navigator.language]); */
   return (
     <>
-      <IntlProvider locale={language} messages={messages[language]}>
+      <IntlProvider locale={LOCALES.SPANISH} messages={messages[LOCALES.SPANISH]}>
         <Router>
           <NavBar></NavBar>
           <Routes>
             <Route exact path='/' element={<PokemonList></PokemonList>} />
+            <Route exact path='/report' element={<Report></Report>} />
             <Route
               path='*'
               element={

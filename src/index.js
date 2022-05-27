@@ -5,15 +5,15 @@ import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
-import { LocaleContext, LocaleProvider } from "./context/LocaleContext";
+import { LocalProvider } from "./contexts/LocalContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <LocaleProvider>
+  <LocalProvider>
     <React.StrictMode>
-      <App />
+      <App/>
     </React.StrictMode>
-  </LocaleProvider>
+  </LocalProvider>
 );
 serviceWorkerRegistration.register();
 // If you want to start measuring performance in your app, pass a function

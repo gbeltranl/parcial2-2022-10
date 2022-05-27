@@ -1,14 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
-import Bar from "../../charts/bar-chart";
-import { LocaleContext } from "../../context/LocaleContext";
+import { LocalContext } from "../../contexts/LocalContext";
 import { LOCALES } from "../../i18n/locales";
 import "./PokemonList.scss";
 
 export const PokemonList = () => {
-  let { locale, changeLocale } = useContext(LocaleContext);
-
-  
+  const { local, changeLocale } = useContext(LocalContext);
   const [pokemons, setPokemons] = useState(null);
   useEffect(() => {
     if (!navigator.onLine) {
@@ -20,31 +17,29 @@ export const PokemonList = () => {
         setPokemons(pokemonsInStorage);
       }
     } else {
-      if (locale === LOCALES.SPANISH) {
+      if (local === LOCALES.SPANISH) {
+        console.log("Espanol");
         fetch(
           "https://gist.githubusercontent.com/jhonatan89/e379fadf8ed0f5381a2d8f8f3dea90c3/raw/f8357c439bbb7b4bd3dc6e8807c52105fb137ec6/pokemon-es.json"
         )
           .then((res) => res.json())
           .then((res) => {
-            console.log("res", res);
             setPokemons(res);
-            console.log("pokemons", pokemons);
             localStorage.setItem("pokemons", JSON.stringify(res));
           });
       } else {
+        console.log("Ingles");
         fetch(
           "https://gist.githubusercontent.com/jhonatan89/2089276d3ce0faceff8e55fc3459b818/raw/30ee1a77b3e328108faaaa9aaac6f2ddaa3d3711/pokemons-en.json"
         )
           .then((res) => res.json())
           .then((res) => {
-            console.log("res", res);
             setPokemons(res);
-            console.log("pokemons", pokemons);
             localStorage.setItem("pokemons", JSON.stringify(res));
           });
       }
     }
-  }, [locale]);
+  }, [local]);
   return (
     <>
       <div className="pokemon-container">

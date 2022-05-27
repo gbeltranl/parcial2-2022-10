@@ -1,13 +1,13 @@
-import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './NavBar.scss';
-import { LocaleContext } from '../../context/LocaleContext';
+import { LOCALES } from '../../i18n/locales';
+import { LocalContext } from '../../contexts/LocalContext';
+import { useContext } from 'react';
 
 export const NavBar = () => {
-  let { localeNew, changeLocale } = useContext(LocaleContext);
-
-  return (
+  const { locale, changeLocal } = useContext(LocalContext);
+    return (
     <nav className='navbar navbar-expand-lg navbar-light bg-light'>
       <div className='container-fluid'>
         <a className='navbar-brand' href='#main'>
@@ -37,7 +37,7 @@ export const NavBar = () => {
               </Link>
             </li>
             <li className='nav-item'>
-              <button className='btn btn=primary' onClick={changeLocale}><FormattedMessage id='changeLanguage'/></button>
+              <button className='btn btn=primary' onClick = {changeLocal} ><FormattedMessage id='changeLanguage'/></button>
             </li>
           </ul>
         </div>

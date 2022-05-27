@@ -1,11 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 
-const Bar = ({ data, width = 600, height = 600 }) => {
+const Bar = ({ width = 600, height = 600 }) => {
   const barChart = useRef();
 
   useEffect(() => {
-    const margin = { top: 10, left: 50, bottom: 40, right: 10 };
+    const data = JSON.parse(localStorage.getItem("pokemons"));
+    const margin = { top: 10, left: 60, bottom: 100, right: 10 };
     const iwidth = width - margin.left - margin.right;
     const iheight = height - margin.top - 2 * margin.bottom;
     // Define scale ordinal - discrete
@@ -80,7 +81,12 @@ const Bar = ({ data, width = 600, height = 600 }) => {
     g.append("g")
       .classed("x--axis", true)
       .call(d3.axisBottom(x))
-      .attr("transform", `translate(0, ${iheight})`);
+      .attr("transform", `translate(0, ${iheight})`)
+      .selectAll("text")	
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-65)");
 
     g.append("g").classed("y--axis", true).call(d3.axisLeft(y));
   });
